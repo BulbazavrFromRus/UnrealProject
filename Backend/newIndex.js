@@ -4,6 +4,7 @@ const httpProxy = require('http-proxy');
 const proxy = httpProxy.createProxyServer();
 const {sequelize} =require('sequelize');
 const app = express();
+
 app.use(cors());
 
 const db  = require("./sequelize_config.js");
@@ -46,3 +47,22 @@ const initApp = async () => {
 
 
 initApp();
+
+const models = require('./models');
+const Role = models.Role;
+Role.bulkCreate([
+  {
+    name: "user"
+  },
+  {
+    name: "moderator"
+  },
+  {
+    name:"admin"
+  }
+])
+
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
+
+
